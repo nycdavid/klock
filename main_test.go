@@ -15,6 +15,10 @@ func TestMain_requiresPort(t *testing.T) {
 	}
 }
 
+func TestMain_writesErrorToStdout(t *testing.T) {
+	t.Skip("Pending")
+}
+
 func TestMain_serverWritesFoobar(t *testing.T) {
 	t.Skip("Pending")
 }
