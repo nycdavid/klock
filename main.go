@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"os"
+	"time"
 )
 
 func main() {
@@ -27,23 +29,23 @@ func realMain() int {
 		conn, err := listener.Accept()
 		if err != nil {
 			log.Fatal(err)
-			return 1
+			continue
 		}
-		err = handle(conn)
-		if err != nil {
-			log.Fatal(err)
-			return 1
-		}
+		go handle(conn)
+		log.Print("After")
 	}
 
 	return 0
 }
 
-func handle(conn net.Conn) error {
+func handle(conn net.Conn) {
 	defer conn.Close()
-	_, err := conn.Write([]byte("Foobar"))
-	if err != nil {
-		return err
+	for {
+		_, err := io.WriteString(conn, "Foobar\n")
+		if err != nil {
+			log.Print("Disconnect")
+			return
+		}
+		time.Sleep(2 * time.Second)
 	}
-	return nil
 }
